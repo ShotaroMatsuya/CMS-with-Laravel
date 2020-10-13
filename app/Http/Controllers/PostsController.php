@@ -96,8 +96,34 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id) //trashされたdataにアクセスする際にはroute-model-bindingは使用できないので注意!
     {
-        //
+
+        $post = Post::withTrashed()->where('id', $id)->firstOrFail(); //もし取得できなかったらexceptionを投げて404pageを表示してくれる
+
+
+        if ($post->trashed()) {
+            $post->forceDelete(); //permanent-deleteされる
+        } else {
+            $post->delete(); //soft-deleteされる(trash)
+        }
+        //flash message
+        session()->flash('success', 'Post deleted successfully.');
+        //redirect user
+        return redirect(route('posts.index'));
+    }
+
+    /**
+     * Display a list of all trashed posts
+     *
+
+     * @return \Illuminate\Http\Response
+     */
+
+    public function trashed()
+    {
+        $trashed = Post::withTrashed()->get(); //trashされたpostを取得
+        return view('posts.index')->with('posts', $trashed);
+        // return view('posts.index')->withPosts($trashed);この書き方でもok
     }
 }

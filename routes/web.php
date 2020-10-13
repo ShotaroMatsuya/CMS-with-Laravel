@@ -21,3 +21,5 @@ Route::get('/home', 'HomeController@index')->name('home'); //nameメソッドで
 
 Route::resource('categories', 'CategoriesController');
 Route::resource('posts', 'PostsController');
+
+Route::get('trashed-posts', 'PostsController@trashed')->name('trashed-posts.index');//name-routeを作成

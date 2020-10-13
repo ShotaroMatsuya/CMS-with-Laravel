@@ -88,9 +88,17 @@
                             <li class="list-group-item">
                             <a href="{{ route('posts.index')}}" class="">Posts</a>
                             </li>
+                  
                             <li class="list-group-item">
                             <a href="{{route('categories.index')}}" class="">Categories</a>
                             </li>
+                        </ul>
+                        <ul class="list-group mt-5">
+           
+                            <li class="list-group-item">
+                            <a href="{{ route('trashed-posts.index')}}" class="">Trashed Posts</a>
+                            </li>
+                      
                         </ul>
                     </div>
                     <div class="col-md-8">
