@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes; //soft-delete機能を追加する
+use Illuminate\Support\Facades\Storage;
 
 class Post extends Model
 {
@@ -11,6 +12,16 @@ class Post extends Model
 
 
     protected $fillable = [
-        'title', 'description', 'content', 'image', 'published_ad'
+        'title', 'description', 'content', 'image', 'published_at'
     ];
+
+    /**
+     * Delete post image from storage
+     * 
+     * @return void
+     */
+    public function deleteImage()
+    {
+        Storage::delete($this->image);
+    }
 }

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Posts\CreatePostsRequest; //artisan make:requestコマンドにより自動的に生成される
+use App\Http\Requests\Posts\UpdatePostRequest;
 use Illuminate\Http\Request;
 use App\Post;
+// use Illuminate\Support\Facades\Storage; //storageファイルを操作するために必要
 
 class PostsController extends Controller
 {
@@ -48,7 +50,8 @@ class PostsController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'content' => $request->content,
-            'image' => $image
+            'image' => $image,
+            'published_at' => $request->published_at
         ]);
         //flash message
         session()->flash('success', 'Post created successfully.');
@@ -73,9 +76,9 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        return view('posts.create')->with('post', $post);
     }
 
     /**
@@ -85,9 +88,26 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdatePostRequest $request, Post $post)
     {
-        //
+        $data = $request->only(['title', 'description', 'published_at', 'content']); //セキュリティ対策で想定外のデータをフィルタリングしておく
+        //check if new image
+        if ($request->hasFile('image')) {
+            //upload it
+            $image = $request->image->store('posts'); //storageフォルダのpostsフォルダに保存
+            //delete old one
+            $post->deleteImage(); //Postクラス内でカスタムしたpublic function
+            $data['image'] = $image; //$dataは連想配列になっている
+        }
+
+        //update attributes
+        $post->update($data);
+
+        //flash message
+        session()->flash('success', 'Post updated successfully.');
+
+        //redirect user
+        return redirect(route('posts.index'));
     }
 
     /**
@@ -103,6 +123,7 @@ class PostsController extends Controller
 
 
         if ($post->trashed()) {
+            $post->deleteImage(); //Postクラス内でカスタムしたpublic function（storageフォルダ内のimageを削除）
             $post->forceDelete(); //permanent-deleteされる
         } else {
             $post->delete(); //soft-deleteされる(trash)
@@ -122,8 +143,15 @@ class PostsController extends Controller
 
     public function trashed()
     {
-        $trashed = Post::withTrashed()->get(); //trashされたpostを取得
+        $trashed = Post::onlyTrashed()->get(); //trashされたpostのみを取得
         return view('posts.index')->with('posts', $trashed);
         // return view('posts.index')->withPosts($trashed);この書き方でもok
+    }
+    public function restore($id) //soft-deleteされたデータにアクセスする場合はroute-model-bindingは使用できないので注意!
+    {
+        $post = Post::withTrashed()->where('id', $id)->firstOrFail(); //もし取得できなかったらexceptionを投げて404pageを表示してくれる
+        $post->restore();
+        session()->flash('success', 'Post restored successfully.');
+        return redirect()->back();
     }
 }
