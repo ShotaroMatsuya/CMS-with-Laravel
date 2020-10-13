@@ -86,7 +86,7 @@
                     <div class="col-md-4">
                         <ul class="list-group">
                             <li class="list-group-item">
-                                <a href="" class="">Posts</a>
+                            <a href="{{ route('posts.index')}}" class="">Posts</a>
                             </li>
                             <li class="list-group-item">
                             <a href="{{route('categories.index')}}" class="">Categories</a>
@@ -106,5 +106,9 @@
             @endauth
         </main>
     </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"  crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    @yield('scripts')
 </body>
 </html>

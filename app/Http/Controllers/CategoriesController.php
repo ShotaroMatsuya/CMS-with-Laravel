@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Http\Requests\CreateCategoryRequest; //バリデーションルールを適用するためにimportが必要
+use App\Http\Requests\Categories\CreateCategoryRequest; //バリデーションルールを適用するためにimportが必要
+use App\Http\Requests\Categories\UpdateCategoriesRequest;
 use App\Category; //categoriesテーブルにアクセスするためにimportが必要
 
 class CategoriesController extends Controller
@@ -40,9 +41,6 @@ class CategoriesController extends Controller
      */
     public function store(CreateCategoryRequest $request) //自動的にRequestインスタンスを変数$requestに代入してくれる省略的な書き方
     {
-        //
-
-
         //staticメソッドでcreateする場合はmass-assignmentエラーに注意
         Category::create([
             'name' => $request->name
@@ -68,9 +66,9 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Category $category) //Categoryモデルのインスタンスを変数に代入
     {
-        //
+        return view('categories.create')->with('category', $category);
     }
 
     /**
@@ -80,9 +78,19 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateCategoriesRequest $request, Category $category)
     {
-        //
+        // $category->name = $request->name; //フォームから送信された値はrequestインスタンスで取得可能
+
+        // $category->save();
+
+        $category->update([
+            'name' => $request->name
+        ]); //この書き方だとsaveメソッド不要
+
+        session()->flash('success', 'Category updated successfully.');
+
+        return redirect(route('categories.index'));
     }
 
     /**
@@ -91,8 +99,13 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Category $category)
     {
         //
+        $category->delete();
+
+        session()->flash('success', 'Category deleted successfully.');
+
+        return redirect(route('categories.index'));
     }
 }

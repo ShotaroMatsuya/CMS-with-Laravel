@@ -20,3 +20,4 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home'); //nameメソッドで"home"というname routeを設定できる
 
 Route::resource('categories', 'CategoriesController');
+Route::resource('posts', 'PostsController');
