@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Posts\CreatePostsRequest; //artisan make:requestコマンドにより自動的に生成される
-use App\Http\Requests\Posts\UpdatePostRequest;
-use Illuminate\Http\Request;
 use App\Post;
+use App\Category;
+use Illuminate\Http\Request;
+use App\Http\Requests\Posts\UpdatePostRequest;
+use App\Http\Requests\Posts\CreatePostsRequest; //artisan make:requestコマンドにより自動的に生成される
 // use Illuminate\Support\Facades\Storage; //storageファイルを操作するために必要
 
 class PostsController extends Controller
 {
+    public function __construct() //middlewareを特定のactionにのみ適用させたい場合constructを使用する
+    {
+        $this->middleware('verifyCategoriesCount')->only(['create', 'store']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -18,6 +23,10 @@ class PostsController extends Controller
     public function index()
     {
         //
+        // dd(Category::first()->posts); //Collectionオブジェクト
+        // dd(Category::first()->posts()); //HasManyオブジェクト
+        // dd(Category::first()->posts()->where('published_at',now())->get()); //HasManyオブジェクトからCollectionオブジェクトを取得
+
         return view('posts.index')->with('posts', Post::all());
     }
 
@@ -29,7 +38,7 @@ class PostsController extends Controller
     public function create()
     {
         //
-        return view('posts.create');
+        return view('posts.create')->with('categories', Category::all());
     }
 
     /**
@@ -51,7 +60,8 @@ class PostsController extends Controller
             'description' => $request->description,
             'content' => $request->content,
             'image' => $image,
-            'published_at' => $request->published_at
+            'published_at' => $request->published_at,
+            'category_id' => $request->category
         ]);
         //flash message
         session()->flash('success', 'Post created successfully.');
@@ -78,7 +88,7 @@ class PostsController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('posts.create')->with('post', $post);
+        return view('posts.create')->with('post', $post)->with('categories', Category::all());
     }
 
     /**

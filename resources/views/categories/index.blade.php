@@ -18,6 +18,7 @@
         <table class="table">
             <thead>
                 <th>Name</th>
+                <th>Posts count</th>
                 <th></th>
             </thead>
             <tbody>
@@ -27,12 +28,15 @@
                         {{$category->name}}
                     </td>
                     <td>
+                        {{$category->posts->count()}} <!-- posts()としないこと!(countメソッドを使うにはcollectionオブジェクトでなければいけない) -->
+                    </td>
+                    <td>
                         {{-- routeメソッドの第２引数にplaceholderに代入する変数をセット --}}
                     <a href="{{route('categories.edit',$category->id)}}" class="btn btn-info btn-sm">Edit</a>
                     <button class="btn btn-danger btn-sm" onclick="handleDelete({{$category->id}})">Delete</button>
                     </td>
                 </tr>
-                    
+
                 @endforeach
             </tbody>
         </table>
@@ -63,15 +67,15 @@
                 </form>
             </div>
           </div>
-          
+
           @else
           <h3 class="text-center">No Categories yet.</h3>
-          
+
           @endif
-          
+
         </div>
 </div>
-    
+
 @endsection
 @section('scripts')
 <script>
@@ -81,5 +85,5 @@
         form.action = '/categories/' + id;
     }
 </script>
-    
+
 @endsection

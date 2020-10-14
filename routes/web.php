@@ -17,11 +17,22 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home'); //nameメソッドで"home"というname routeを設定できる
+// Route::get('/home', 'HomeController@index')->name('home'); //nameメソッドで"home"というname routeを設定できる
 
-Route::resource('categories', 'CategoriesController');
-Route::resource('posts', 'PostsController');
+// Route::resource('categories', 'CategoriesController');
+// Route::resource('posts', 'PostsController')->middleware(['auth']); //すべてのrouteにmiddlewareを適用したい場合はこちらでmiddlewareメソッドを使用
 
-Route::get('trashed-posts', 'PostsController@trashed')->name('trashed-posts.index'); //name-routeを作成
+// Route::get('trashed-posts', 'PostsController@trashed')->name('trashed-posts.index'); //name-routeを作成
 
-Route::put('restore-post/{post}', 'PostsController@restore')->name('restore-posts');
+// Route::put('restore-post/{post}', 'PostsController@restore')->name('restore-posts');
+
+Route::middleware(['auth'])->group(function () { //すべてのrouteにmiddlewareが適用される
+    Route::get('/home', 'HomeController@index')->name('home'); //nameメソッドで"home"というname routeを設定できる
+
+    Route::resource('categories', 'CategoriesController');
+    Route::resource('posts', 'PostsController');
+
+    Route::get('trashed-posts', 'PostsController@trashed')->name('trashed-posts.index'); //name-routeを作成
+
+    Route::put('restore-post/{post}', 'PostsController@restore')->name('restore-posts');
+});

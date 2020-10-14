@@ -12,16 +12,20 @@ class Post extends Model
 
 
     protected $fillable = [
-        'title', 'description', 'content', 'image', 'published_at'
+        'title', 'description', 'content', 'image', 'published_at', 'category_id'
     ];
 
     /**
      * Delete post image from storage
-     * 
+     *
      * @return void
      */
     public function deleteImage()
     {
         Storage::delete($this->image);
+    }
+    public function category() //自動的にpostsテーブルのcategory_idを探しに行く
+    {
+        return $this->belongsTo(Category::class); //一つのcategoryを返す
     }
 }
