@@ -39,3 +39,11 @@ Route::middleware(['auth'])->group(function () { //すべてのrouteにmiddlewar
 
     Route::put('restore-post/{post}', 'PostsController@restore')->name('restore-posts');
 });
+
+// middlewareを適用する順番も大事authとadminを逆に書くと機能しないので注意
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('users/profile', 'UsersController@edit')->name('users.edit-profile');
+    Route::put('users/profile', 'UsersController@update')->name('users.update-profile');
+    Route::get('users', 'UsersController@index')->name('users.index');
+    Route::post('users/{user}/make-admin', 'UsersController@makeAdmin')->name('users.make-admin');
+});
