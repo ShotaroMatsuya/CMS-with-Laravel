@@ -24,8 +24,21 @@ class Post extends Model
     {
         Storage::delete($this->image);
     }
-    public function category() //自動的にpostsテーブルのcategory_idを探しに行く
+    public function category() //自動的にpostsテーブルのcategory_idを探しに行く(oneToManyなのでこちらは単数形)
     {
         return $this->belongsTo(Category::class); //一つのcategoryを返す
+    }
+    public function tags()
+    { //ManyToManyなので複数形
+        return $this->belongsToMany(Tag::class);
+    }
+    /**
+     * check if post has tag
+     *
+     * @return bool
+     */
+    public function hasTag($tagId)
+    {
+        return in_array($tagId, $this->tags->pluck('id')->toArray()); //変数tagIdが配列に含まれて入ればtrueを返す
     }
 }

@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Http\Requests\Categories\CreateCategoryRequest; //バリデーションルールを適用するためにimportが必要
-use App\Http\Requests\Categories\UpdateCategoriesRequest;
-use App\Category; //categoriesテーブルにアクセスするためにimportが必要
+use App\Http\Requests\Tags\CreateTagRequest; //バリデーションルールを適用するためにimportが必要
+use App\Http\Requests\Tags\UpdateTagsRequest;
+use App\Tag; //categoriesテーブルにアクセスするためにimportが必要
 
-class CategoriesController extends Controller
+class TagsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +18,7 @@ class CategoriesController extends Controller
     public function index()
     {
         //
-        return view('categories.index')->with('categories', Category::all());
+        return view('tags.index')->with('tags', Tag::all());
     }
 
     /**
@@ -30,7 +30,7 @@ class CategoriesController extends Controller
     {
         //
 
-        return view('categories.create');
+        return view('tags.create');
     }
 
     /**
@@ -39,14 +39,14 @@ class CategoriesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CreateCategoryRequest $request) //自動的にRequestインスタンスを変数$requestに代入してくれる省略的な書き方
+    public function store(CreateTagRequest $request) //自動的にRequestインスタンスを変数$requestに代入してくれる省略的な書き方
     {
         //staticメソッドでcreateする場合はmass-assignmentエラーに注意
-        Category::create([
+        Tag::create([
             'name' => $request->name
         ]);
-        session()->flash('success', 'Category created successfully.');
-        return redirect(route('categories.index'));
+        session()->flash('success', 'Tag created successfully.');
+        return redirect(route('tags.index'));
     }
 
     /**
@@ -66,9 +66,9 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Category $category) //Categoryモデルのインスタンスを変数に代入
+    public function edit(Tag $tag) //Tagモデルのインスタンスを変数に代入
     {
-        return view('categories.create')->with('category', $category);
+        return view('tags.create')->with('tag', $tag);
     }
 
     /**
@@ -78,19 +78,19 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCategoriesRequest $request, Category $category)
+    public function update(UpdateTagsRequest $request, Tag $tag)
     {
         // $category->name = $request->name; //フォームから送信された値はrequestインスタンスで取得可能
 
         // $category->save();
 
-        $category->update([
+        $tag->update([
             'name' => $request->name
         ]); //この書き方だとsaveメソッド不要
 
-        session()->flash('success', 'Category updated successfully.');
+        session()->flash('success', 'Tag updated successfully.');
 
-        return redirect(route('categories.index'));
+        return redirect(route('tags.index'));
     }
 
     /**
@@ -99,18 +99,17 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy(Tag $tag)
     {
         //
-        if ($category->posts->count() > 0) {
-            session()->flash('error', 'Category cannot be deleted becaouse it has some posts.');
+        if ($tag->posts->count() > 0) {
+            session()->flash('error', 'Tag cannot deleted, because it is associated to some posts.');
             return redirect()->back();
         }
+        $tag->delete();
 
-        $category->delete();
+        session()->flash('success', 'Tag deleted successfully.');
 
-        session()->flash('success', 'Category deleted successfully.');
-
-        return redirect(route('categories.index'));
+        return redirect(route('tags.index'));
     }
 }

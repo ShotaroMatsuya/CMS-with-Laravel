@@ -21,7 +21,7 @@ class CreatePostsTable extends Migration
             $table->string('image');
             $table->integer('category_id');
             $table->timestamp('published_at')->nullable();
-            $table->softDeletes(); //soft-delete機能を追加
+            // $table->softDeletes(); //soft-delete機能を追加
             $table->timestamps();
         });
     }

@@ -32,6 +32,9 @@ Route::middleware(['auth'])->group(function () { //すべてのrouteにmiddlewar
     Route::resource('categories', 'CategoriesController');
     Route::resource('posts', 'PostsController');
 
+    Route::resource('tags', 'TagsController');
+
+
     Route::get('trashed-posts', 'PostsController@trashed')->name('trashed-posts.index'); //name-routeを作成
 
     Route::put('restore-post/{post}', 'PostsController@restore')->name('restore-posts');
