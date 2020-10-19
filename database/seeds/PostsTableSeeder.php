@@ -2,8 +2,10 @@
 
 use App\Tag;
 use App\Post;
+use App\User;
 use App\Category;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class PostsTableSeeder extends Seeder
 {
@@ -14,6 +16,16 @@ class PostsTableSeeder extends Seeder
      */
     public function run()
     {
+        $author1 = User::create([
+            'name' => 'John Doe',
+            'email' => 'john@doe.com',
+            'password' => Hash::make('password')
+        ]);
+        $author2 = User::create([
+            'name' => 'Jane Doe',
+            'email' => 'jane@doe.com',
+            'password' => Hash::make('password')
+        ]);
         $category1 = Category::create([
             'name' => 'News'
         ]);
@@ -28,24 +40,25 @@ class PostsTableSeeder extends Seeder
             'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore',
             'content' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitatio',
             'category_id' => $category1->id,
-            'image' => 'posts/1.jpg'
+            'image' => 'posts/1.jpg',
+            'user_id' => $author1->id
         ]);
 
-        $post2 = Post::create([
+        $post2 = $author2->posts()->create([
             'title' => 'Top 5 brilliant content marketing strategies',
             'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore',
             'content' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitatio',
             'category_id' => $category2->id,
             'image' => 'posts/2.jpg'
         ]);
-        $post3 = Post::create([
+        $post3 = $author1->posts()->create([
             'title' => 'Best practices for minimalist design with example',
             'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore',
             'content' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitatio',
             'category_id' => $category3->id,
             'image' => 'posts/3.jpg'
         ]);
-        $post4 = Post::create([
+        $post4 = $author2->posts()->create([
             'title' => 'Congratulate and thank to Maryam for joining our team',
             'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore',
             'content' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitatio',

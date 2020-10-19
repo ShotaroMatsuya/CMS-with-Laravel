@@ -2,9 +2,10 @@
 
 namespace App;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes; //soft-delete機能を追加する
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\SoftDeletes; //soft-delete機能を追加する
 
 class Post extends Model
 {
@@ -12,7 +13,7 @@ class Post extends Model
 
 
     protected $fillable = [
-        'title', 'description', 'content', 'image', 'published_at', 'category_id'
+        'title', 'description', 'content', 'image', 'published_at', 'category_id', 'user_id'
     ];
 
     /**
@@ -40,5 +41,9 @@ class Post extends Model
     public function hasTag($tagId)
     {
         return in_array($tagId, $this->tags->pluck('id')->toArray()); //変数tagIdが配列に含まれて入ればtrueを返す
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

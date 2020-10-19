@@ -12,6 +12,8 @@ class WelcomeController extends Controller
     //
     public function index()
     {
-        return view('welcome')->with('categories', Category::all())->with('tags', Tag::all())->with('posts', Post::all());
+        return view('welcome')->with('categories', Category::all())->with('tags', Tag::all())->with('posts', Post::simplePaginate(2)/*Post::paginate(2)*/);
+        //paginateメソッドでかんたんにペジネーションリンクを生成できる
+        //simplePaginateメソッドは前後のページリンクのみを生成
     }
 }
