@@ -11,6 +11,10 @@ class Post extends Model
 {
     use SoftDeletes;
 
+    protected $date = [ //published_atをdateオブジェクトとして扱うためにはこのように宣言する必要がある
+        'published_at'
+    ];
+
 
     protected $fillable = [
         'title', 'description', 'content', 'image', 'published_at', 'category_id', 'user_id'
@@ -45,5 +49,17 @@ class Post extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function scopePublished($query) //publishedされたもの(過去のものだけを取得するquery)
+    {
+        return $query->where('published_at', '<=', now()); //now()はlaravelにビルトインされたdateオブジェクト
+    }
+    public function scopeSearched($query) //QueryScopeでsqlのクエリ文を使い回す
+    {
+        $search = request()->query('search');
+        if (!$search) {
+            return $query->published();
+        }
+        return $query->published()->where('title', 'LIKE', "%{$search}%");
     }
 }

@@ -12,7 +12,21 @@ class WelcomeController extends Controller
     //
     public function index()
     {
-        return view('welcome')->with('categories', Category::all())->with('tags', Tag::all())->with('posts', Post::simplePaginate(2)/*Post::paginate(2)*/);
+        // if (request()->query('search')) {
+        //     dd(request()->query('search')); //GETリクエストのurlクエリを取得できる
+        // }
+        // $search = request()->query('search');
+        // if ($search) {
+        //     $posts = Post::where('title', 'LIKE', "%{$search}%")->simplePaginate(1);
+        // } else {
+        //     $posts = Post::simplePaginate(3);
+        // }
+
+        return view('welcome')->with('categories', Category::all())->with('tags', Tag::all())->with('posts', Post::searched()->simplePaginate(3));
+
+
+        //QueryScopeを使えば冗長なデータベースのクエリ文を使い回すことができる（上の例ではscopeSearchedメソッドで定義されたクエリを呼び出している）
+        /*Post::paginate(2)*/
         //paginateメソッドでかんたんにペジネーションリンクを生成できる
         //simplePaginateメソッドは前後のページリンクのみを生成
     }
