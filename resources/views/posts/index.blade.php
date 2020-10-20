@@ -21,7 +21,7 @@
                     <tr>
                         <td>
                             {{-- assetメソッドを使うとフルパスを取得できる --}}
-                            <img src="{{asset('/storage/' .$post->image)}}" width="120px" height="60px" alt="">
+                        <img src="{{Storage::disk('s3')->url($post->image)/*asset('/storage/' .$post->image)*/}}" width="120px" height="60px" alt="">
                         </td>
                         <td>
                             {{$post->title}}

@@ -5,7 +5,7 @@
 @endsection
 @section('header')
    <!-- Header -->
-   <header class="header text-white h-fullscreen pb-80" style="background-image: url({{asset('/storage/'.$post->image)}});" data-overlay="9">
+<header class="header text-white h-fullscreen pb-80" style="background-image: url({{Storage::disk('s3')->url($post->image)/*asset('/storage/'.$post->image)*/}});" data-overlay="9">
     <div class="container text-center">
 
       <div class="row h-100">

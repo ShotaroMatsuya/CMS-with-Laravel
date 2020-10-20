@@ -6,6 +6,8 @@ use App\Tag;
 use App\Post;
 use App\Category;
 use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Posts\UpdatePostRequest;
 use App\Http\Requests\Posts\CreatePostsRequest; //artisan make:requestコマンドにより自動的に生成される
 // use Illuminate\Support\Facades\Storage; //storageファイルを操作するために必要
@@ -54,15 +56,16 @@ class PostsController extends Controller
         // upload the image to storage
 
         // dd($request->image->store('posts')); //Requestオブジェクト内のimageはUploadedFileクラスのインスタンスになっていてstoreメソッドを使用することができる(storage/~/postsフォルダにimageファイルが保存される)
-        $image = $request->image->store('posts'); //storageファイル内のpathが取得できる
-
+        // $image = $request->image->store('posts'); //storageファイル内のpathが取得できる
+        $image = $request->file('image');
+        $path = Storage::disk('s3')->put('/', $image, 'public');
 
         //create the post
         $post = Post::create([
             'title' => $request->title,
             'description' => $request->description,
             'content' => $request->content,
-            'image' => $image,
+            'image' => $path,
             'published_at' => $request->published_at,
             'category_id' => $request->category,
             'user_id' => auth()->user()->id
@@ -113,10 +116,12 @@ class PostsController extends Controller
         //check if new image
         if ($request->hasFile('image')) {
             //upload it
-            $image = $request->image->store('posts'); //storageフォルダのpostsフォルダに保存
+            // $image = $request->image->store('posts'); //storageフォルダのpostsフォルダに保存
+            $image = $request->file('image');
+            $path = Storage::disk('s3')->put('/', $image, 'public');
             //delete old one
             $post->deleteImage(); //Postクラス内でカスタムしたpublic function
-            $data['image'] = $image; //$dataは連想配列になっている
+            $data['image'] = $path; //$dataは連想配列になっている
         }
 
         if ($request->tags) {

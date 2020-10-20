@@ -36,7 +36,7 @@
             </div>
             @if (isset($post))
                 <div class="form-group">
-                <img src="{{asset('/storage/'.$post->image)}}" alt="" style="width:100%;">
+                <img src="{{Storage::disk('s3')->url($post->image)/*asset('/storage/'.$post->image)*/}}" alt="" style="width:100%;">
                 </div>
             @endif
             <div class="form-group">
