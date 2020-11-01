@@ -23,7 +23,7 @@
             <div class="form-group">
                 <label for="description">Description</label>
                 <input id="description" type="hidden" name="description" value="{{isset($post) ? $post->description: ''}}">
-                    <trix-editor input="content"></trix-editor>
+                    <trix-editor input="description"></trix-editor>
             </div>
             <div class="form-group">
                 <label for="content">Content</label>

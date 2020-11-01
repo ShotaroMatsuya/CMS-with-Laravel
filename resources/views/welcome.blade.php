@@ -48,8 +48,11 @@ Saas Blog
                             </a>
                         </p>
                           <h5 class="mb-0">
-                          <a class="text-dark" href="{{route('blog.show',$post->id)}}">{{$post->title}}</a>
+                          <a class="text-dark text-bold" href="{{route('blog.show',$post->id)}}">{{$post->title}}</a>
                           </h5>
+                          <p class="lead">
+                            <a  href="{{route('blog.show',$post->id)}}">{!!$post->description!!}</a>
+                          </p>
                         </div>
                       </div>
                     </div>

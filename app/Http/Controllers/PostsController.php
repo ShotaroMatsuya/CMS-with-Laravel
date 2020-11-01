@@ -28,9 +28,11 @@ class PostsController extends Controller
         //
         // dd(Category::first()->posts); //Collectionオブジェクト
         // dd(Category::first()->posts()); //HasManyオブジェクト
-        // dd(Category::first()->posts()->where('published_at',now())->get()); //HasManyオブジェクトからCollectionオブジェクトを取得
+        // dd(Category::first()->posts()->where('published_at', '<', now())->get()); //HasManyオブジェクトからCollectionオブジェクトを取得
+        // dd(Post::orderBy('published_at', 'desc')->get());
+        $posts = Post::orderBy('published_at', 'desc')->get();
 
-        return view('posts.index')->with('posts', Post::all());
+        return view('posts.index')->with('posts', $posts);
     }
 
     /**

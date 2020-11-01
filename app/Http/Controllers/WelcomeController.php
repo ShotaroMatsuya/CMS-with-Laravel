@@ -22,7 +22,7 @@ class WelcomeController extends Controller
         //     $posts = Post::simplePaginate(3);
         // }
 
-        return view('welcome')->with('categories', Category::all())->with('tags', Tag::all())->with('posts', Post::searched()->simplePaginate(3));
+        return view('welcome')->with('categories', Category::all())->with('tags', Tag::all())->with('posts', Post::searched()->orderBy('published_at', 'desc')->simplePaginate(4));
 
 
         //QueryScopeを使えば冗長なデータベースのクエリ文を使い回すことができる（上の例ではscopeSearchedメソッドで定義されたクエリを呼び出している）
