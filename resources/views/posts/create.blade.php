@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-
+@include('includes.tinyeditor')
 @section('content')
 
     <div class="card card-default">
@@ -22,13 +22,13 @@
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
-            <textarea name="description" id="description" cols="5" rows="5" class="form-control">{{isset($post) ? $post->description:''}}</textarea>
+                <input id="description" type="hidden" name="description" value="{{isset($post) ? $post->description: ''}}">
+                    <trix-editor input="content"></trix-editor>
             </div>
             <div class="form-group">
                 <label for="content">Content</label>
 
-            <input id="content" type="hidden" name="content" value="{{isset($post) ? $post->content: ''}}">
-                <trix-editor input="content"></trix-editor>
+                <textarea name="content" id="content" cols="5" rows="5" class="form-control">{{isset($post) ? $post->content:''}}</textarea>
             </div>
             <div class="form-group">
                 <label for="published_at">Published At</label>
