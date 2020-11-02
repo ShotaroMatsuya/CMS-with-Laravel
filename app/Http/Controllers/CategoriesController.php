@@ -45,7 +45,7 @@ class CategoriesController extends Controller
         Category::create([
             'name' => $request->name
         ]);
-        session()->flash('success', 'Category created successfully.');
+        session()->flash('success', 'カテゴリーの作成に成功しました。');
         return redirect(route('categories.index'));
     }
 
@@ -88,7 +88,7 @@ class CategoriesController extends Controller
             'name' => $request->name
         ]); //この書き方だとsaveメソッド不要
 
-        session()->flash('success', 'Category updated successfully.');
+        session()->flash('success', 'カテゴリーの編集内容が保存されました。');
 
         return redirect(route('categories.index'));
     }
@@ -103,13 +103,13 @@ class CategoriesController extends Controller
     {
         //
         if ($category->posts->count() > 0) {
-            session()->flash('error', 'Category cannot be deleted becaouse it has some posts.');
+            session()->flash('error', 'このカテゴリーはすでにいくつかの記事に使用されているため削除できません。');
             return redirect()->back();
         }
 
         $category->delete();
 
-        session()->flash('success', 'Category deleted successfully.');
+        session()->flash('success', 'カテゴリーの削除に成功しました。');
 
         return redirect(route('categories.index'));
     }

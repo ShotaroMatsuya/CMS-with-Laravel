@@ -45,7 +45,7 @@ class TagsController extends Controller
         Tag::create([
             'name' => $request->name
         ]);
-        session()->flash('success', 'Tag created successfully.');
+        session()->flash('success', 'タグの作成に成功しました。');
         return redirect(route('tags.index'));
     }
 
@@ -88,7 +88,7 @@ class TagsController extends Controller
             'name' => $request->name
         ]); //この書き方だとsaveメソッド不要
 
-        session()->flash('success', 'Tag updated successfully.');
+        session()->flash('success', 'タグの更新に成功しました。');
 
         return redirect(route('tags.index'));
     }
@@ -103,12 +103,12 @@ class TagsController extends Controller
     {
         //
         if ($tag->posts->count() > 0) {
-            session()->flash('error', 'Tag cannot deleted, because it is associated to some posts.');
+            session()->flash('error', 'このタグはいくつかの記事に使用されているため、削除できません。');
             return redirect()->back();
         }
         $tag->delete();
 
-        session()->flash('success', 'Tag deleted successfully.');
+        session()->flash('success', 'タグの削除に成功しました。');
 
         return redirect(route('tags.index'));
     }

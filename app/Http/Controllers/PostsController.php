@@ -77,7 +77,7 @@ class PostsController extends Controller
             $post->tags()->attach($request->tags); //attachメソッドManyToManyのとき使用できる
         }
         //flash message
-        session()->flash('success', 'Post created successfully.');
+        session()->flash('success', '記事の投稿に成功しました。');
         //redirect user
         return redirect(route('posts.index'));
     }
@@ -129,12 +129,16 @@ class PostsController extends Controller
         if ($request->tags) {
             $post->tags()->sync($request->tags); //ManyToManyで使用できるsyncメソッド
         }
+        if ($request->category) {
+
+            $data['category_id'] = $request->category;
+        }
 
         //update attributes
         $post->update($data);
 
         //flash message
-        session()->flash('success', 'Post updated successfully.');
+        session()->flash('success', '記事の変更が保存されました。');
 
         //redirect user
         return redirect(route('posts.index'));
@@ -159,7 +163,7 @@ class PostsController extends Controller
             $post->delete(); //soft-deleteされる(trash)
         }
         //flash message
-        session()->flash('success', 'Post deleted successfully.');
+        session()->flash('success', '記事の削除に成功しました.');
         //redirect user
         return redirect(route('posts.index'));
     }
@@ -174,6 +178,7 @@ class PostsController extends Controller
     public function trashed()
     {
         $trashed = Post::onlyTrashed()->get(); //trashされたpostのみを取得
+        // dd($trashed);//コレクション型で取得
         return view('posts.index')->with('posts', $trashed);
         // return view('posts.index')->withPosts($trashed);この書き方でもok
     }
@@ -181,7 +186,7 @@ class PostsController extends Controller
     {
         $post = Post::withTrashed()->where('id', $id)->firstOrFail(); //もし取得できなかったらexceptionを投げて404pageを表示してくれる
         $post->restore();
-        session()->flash('success', 'Post restored successfully.');
+        session()->flash('success', '記事のリストアに成功しました。');
         return redirect()->back();
     }
 }

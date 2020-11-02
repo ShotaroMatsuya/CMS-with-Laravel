@@ -17,7 +17,7 @@ class UsersController extends Controller
     {
         $user->role = 'admin';
         $user->save();
-        session()->flash('success', 'User made admin successfully.');
+        session()->flash('success', 'ユーザーにAdmin権限を付与しました。');
         return redirect(route('users.index'));
     }
     public function edit()
@@ -33,7 +33,7 @@ class UsersController extends Controller
             'about' => $request->about
         ]);
 
-        session()->flash('success', 'User updated successfully.');
+        session()->flash('success', 'ユーザー情報の変更が反映されました。');
 
         return redirect()->back();
     }
