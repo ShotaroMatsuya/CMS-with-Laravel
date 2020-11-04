@@ -38,6 +38,30 @@
           <span class="navbar-divider d-mobile-none"></span>
 
           <ul class="nav nav-navbar">
+            <li class="nav-item">
+            <a class="nav-link" href="{{route('welcome')}}">LaraBlog</span></a>
+
+            </li>
+
+
+
+            <li class="nav-item">
+              <a class="nav-link" href="#">カテゴリ一覧 <span class="arrow"></span></a>
+              <nav class="nav">
+                  @foreach ($categories as $category)
+              <a class="nav-link" href="{{route('blog.category',$category->id)}}">{{$category->name}}</a>
+                  @endforeach
+              </nav>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="#">タグ一覧 <span class="arrow"></span></a>
+              <nav class="nav">
+                @foreach ($tags as $tag)
+              <a class="nav-link" href="{{route('blog.tag',$tag->id)}}">{{$tag->name}}</a>
+                @endforeach
+            </nav>
+            </li>
 
           </ul>
         </section>
