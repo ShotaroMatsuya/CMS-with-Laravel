@@ -30,7 +30,7 @@ class PostsController extends Controller
         // dd(Category::first()->posts()); //HasManyオブジェクト
         // dd(Category::first()->posts()->where('published_at', '<', now())->get()); //HasManyオブジェクトからCollectionオブジェクトを取得
         // dd(Post::orderBy('published_at', 'desc')->get());
-        $posts = Post::orderBy('published_at', 'desc')->get();
+        $posts = Post::orderBy('published_at', 'desc')->paginate(10);
 
         return view('posts.index')->with('posts', $posts);
     }
@@ -177,8 +177,8 @@ class PostsController extends Controller
 
     public function trashed()
     {
-        $trashed = Post::onlyTrashed()->get(); //trashされたpostのみを取得
-        // dd($trashed);//コレクション型で取得
+        $trashed = Post::onlyTrashed()->paginate(10); //trashされたpostのみを取得
+        // dd($trashed); //コレクション型で取得
         return view('posts.index')->with('posts', $trashed);
         // return view('posts.index')->withPosts($trashed);この書き方でもok
     }

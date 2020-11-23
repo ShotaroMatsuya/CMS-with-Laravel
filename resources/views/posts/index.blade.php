@@ -62,6 +62,7 @@
                     @endforeach
                 </tbody>
             </table>
+            {{$posts->links()}}
 
             @else
             <h3 class="text-center">No Posts Yet</h3>
