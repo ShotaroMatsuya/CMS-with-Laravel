@@ -27,8 +27,8 @@ class Post extends Model
      */
     public function deleteImage()
     {
-        $disk = Storage::disk('s3');
-        Storage::delete();
+        $path = Storage::disk('s3')->url($this->image);
+        Storage::delete($path);
     }
     public function category() //自動的にpostsテーブルのcategory_idを探しに行く(oneToManyなのでこちらは単数形)
     {
